@@ -1,13 +1,27 @@
 package com.projeto.desafio.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity
 public class Empresa implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
 	private String cnpj;
 	private String nomeFantasia;
 	private String cep;
+	
+	@ManyToMany(mappedBy = "listaEmpresas")
+	@JsonBackReference
+	private List<Fornecedor> listaFornecedores = new ArrayList<>();
 	
 	public Empresa() {
 	}
@@ -41,6 +55,14 @@ public class Empresa implements Serializable {
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}
+
+	public List<Fornecedor> getListaFornecedores() {
+		return listaFornecedores;
+	}
+
+	public void setListaFornecedores(List<Fornecedor> listaFornecedores) {
+		this.listaFornecedores = listaFornecedores;
 	}
 
 	@Override

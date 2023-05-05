@@ -1,14 +1,37 @@
 package com.projeto.desafio.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Fornecedor implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
 	private String cnpjOuCpf;
 	private String nome;
 	private String email;
 	private String cep;
+	
+	@ManyToMany
+	@JoinTable(name = "EMPRESA_FORNECEDOR",
+			   joinColumns = @JoinColumn(name = "cnpj_cpf_fornecedor"),
+			   inverseJoinColumns = @JoinColumn(name = "cnpj_empresa")
+	)
+	@JsonManagedReference
+	private List<Empresa> listaEmpresas = new ArrayList<>();
 	
 	public Fornecedor() {
 	}
@@ -53,6 +76,14 @@ public class Fornecedor implements Serializable {
 		this.cep = cep;
 	}
 
+	public List<Empresa> getListaEmpresas() {
+		return listaEmpresas;
+	}
+
+	public void setListaEmpresas(List<Empresa> listaEmpresas) {
+		this.listaEmpresas = listaEmpresas;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,5 +108,6 @@ public class Fornecedor implements Serializable {
 			return false;
 		return true;
 	}
+
 
 }
